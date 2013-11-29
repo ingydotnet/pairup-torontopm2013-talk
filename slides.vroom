@@ -1,0 +1,281 @@
+---- config
+title: PairUp Bash
+indent: 5
+auto_size: 1
+vim_opts: '-u NONE'
+skip: 0
+
+---- center
+PairUp Bash
+
+(and other ingyware abominations)
+
+by Ingy döt Net
+
+Nov 28, 2013
+
+Toronto Perl Mongers
+
+----
+== WTF is going on?
+
++* PairUp -- Pair program with anyone on GitHub or IRC
+* Termcast -- Let the internet watch you
+* git-hub -- All of Git-Hub in your terminal
+* json-bash -- Seriously
+* test-more-bash -- No joke
+* bash+ -- aka Perl 0.1
+* bpan -- Like CPAN, only worse
+* git-subrepo -- Git submodules can DIE!
+* ... -- pronounced dotdotdot
+* 10 things you (probably) don't know about YAML
+
+----
+== PairUp
+
+* Find someone on IRC and start hacking
+* Remote machine. Throw away.
+* Near perfect config for you and pair
+* Let everyone watch on termcast
+* #pairup (perl/freenode)
+* https://github.com/PairUp (orgranization)
+* Use hangout/youtube (like right now :)
+* Hack/Push/Relax
+
+* LIVE DEMO :[
+
+----
+== Termcast
+
+* jasonmay++ doy++
+* Perl + Node
+* App::Termcast::Server
+  * Let's terms connect/broadcast
+* App::Termcast
+  * Client connectpr
+* jasonmay/node-termcast-server
+  * HTML5 Canvas viewer
+* http://termcast.pairup.net
+
+----
+== git-hub
+
+* A plugin for commandline git
+* Written in Bash
+* Do almost everything from CLI
+
+* LIVE DEMO :{
+
+----
+== json-bash
+
+* LIVE DEMO 6_9
+
+----
+== test-more-bash
+
+* LIVE DEMO -_-
+
+----
+== bashplus
+
+* LIVE DEMO +_+
+
+----
+== bpan.org
+
+* New CPAN for Bash
+* Built over GitHub
+* New Author is a PR
+  * Author index
+* Release is a tag push
+  * Web-hook (like travis-ci)
+* BPAN.org updates/pushes index
+  * After rules/sanity check
+* `bpan` CLI installer
+* Release has a tag/commit
+
+----
+== git-subrepo
+
+* LIVE DEMO g_g
+
+----
+== ...
+
+* LIVE DEMO ._.
+
+----
+== 10 things you (probably) don't know about YAML
+----
+== 1) Quotes and Escaping
+
+* Plain scalar (unquoted)
+  * First char limitations
+  * Some limitations like ': '
+* Double-quoted - only form that can encode any possible value
+* Single quote has only one escape ('')
+
+----
+== 2) Multiline Scalars
+
+- "(
+     mkdir foo;
+     cd foo;
+     touch bar
+  )"
+- "( mkdir foo; cd foo; touch bar )"
+
++- |4+
+        sub foo {
+            ...
+        }
+
+----
+== 3) Any YAML text can represent any native (Perl) object
+
+* A "schema" creates the meaning
+* Schemas are currently implicit
+* Golden Rule: Loader should match Dumper
+
+----
+== 4) YAML and JSON have only 3 (model) differences
+
++1) Types/Tags
++2) Refs/Anchors/Aliases
++3) Any node can be a key
+
+----
+== 5) Sets and Ordered Maps
+
++  {foo, bar, baz}
+
++# Set notation
+foo: ~
+bar: ~
+baz: ~
+
++  [foo: yum, bar: glug, baz: jazz]
+
++# Omap notation
+- foo: yum
+- bar: glug
+- baz: jazz
+
+----
+== 6) Collection Keys
+
+[1, 2, 3]: 4
+{a: b}: c
+
+----
+== 7) YAML Stack
+
+Loader Stack Memory Representation Dumper Stack
+==============================================================
+         Loader                  Dumper
+               \                /
+           (Native Perl Data/Objects)
+               /                \
+    Constructor                  Representer
+               \                /
+                (YAML Node Graph)
+               /                \
+      Composer <--> Resolver <--> Serializer
+               \                /
+                (YAML Event Tree)
+               /                \
+         Parser                  Emitter
+               \                /
+                (YAML Token Stream)
+               /                /
+        Scanner
+               \                /
+                    (YAML Character Stream)
+               /                \
+         Reader                  Writer
+               \                /
+                 (YAML String or File Handle)
+
+----
+== 8) Streaming API - YAML Events
+
+* STREAM_START
+* STREAM_END
+* DOCUMENT_START
+* DOCUMENT_END
+* MAPPING_START
+* MAPPING_END
+* SEQUENCE_START
+* SEQUENCE_END
+* SCALAR
+* ALIAS
+
+---- yaml,i4
+== Example Events
+
+---
+foo: &list
+- hello
+- world
+bar: *list
+--- Goodbye
+
+----
+* STREAM_START
+* DOCUMENT_START
+* MAPPING_START
+* SCALAR value="foo"
+* SEQUENCE_START anchor="list"
+* SCALAR value="hello"
+* SCALAR value="world"
+* SEQUENCE_END
+* SCALAR value="bar"
+* ALIAS anchor="list"
+* MAPPING_END
+* DOCUMENT_END
+* DOCUMENT_START
+* SCALAR value="Goodbye"
+* DOCUMENT_END
+* STREAM_END
+
+----
+== 9) Unicode API in Perl YAMLs is :(
+
+YAML:
+    Dump: produces a character string
+    Load: consumes a character string
+    DumpFile: sends Dump output to file opened with :utf8 layer
+    LoadFile: calls Load on result of reading file opened with :utf8 layer
+
+YAML::Tiny:
+    Dump: produces a character string
+    Load: consumes an octet string
+    DumpFile: sends Dump output to file opened with default layer
+    LoadFile: calls Load on result of reading file opened with default layer
+
+YAML::XS:
+    Dump: produces an octet string
+    Load: consumes an octet string
+    DumpFile: sends Dump output to file opened with default layer
+    LoadFile: calls Load on result of reading file opened with default layer
+
+YAML::Syck (default) (is this right?):
+    Dump: produces a character string
+    Load: consumes a character string
+    DumpFile: sends Dump output to file opened with default layer or a
+user provided-filehandle
+    LoadFile: calls Load on result of reading a file opened with
+default layer or a user-provided filehandle
+
+----
+== 10) #yaml on irc.perl.org
+
+* Working on making YAML in Perl be great
+* Toolchainers++
+* #yaml irc.freenode.net
+
+----
+== The End
+
+Questions?
